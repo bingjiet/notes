@@ -7,6 +7,22 @@ ApplicationContext 继承 BeanFactory
 - EnvironmentCapable 获取环境信息
 - ApplicationEventPublisher 分发事件，容器中所有的组件都可以用与处理事件，只要加上 @EventListener 注解即可对事件进行监听处理
 
+### Bean 的生命周期
+
+- 实例化构造方法
+- 依赖注入
+- 初始化
+- 销毁
+
+BeanPostProcessor 用于给 Bean 生命周期中的各个阶段提供扩展
+- 实例化前后
+- 初始化前后
+- 销毁前
+
+### BeanPostProcessor
+
+- AutowiredAnnotationBeanPostProcessor 解析 @Autowired @Value 注解
+- CommonAnnotationBeanPostProcessor    解析 @PostConstruct @Resource @PreDestroy 注解
 
 ### BeanFacotryPostProcessor
 
