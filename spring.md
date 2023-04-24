@@ -144,3 +144,38 @@ ConfigurationClassPostProcessor 解析 @ComponentScan @Bean @Import @ImportResou
   }
 ```
 
+各种 Aware 回调接口和初始化接口 InitializingBean
+流程就是先调用 Aware 回调接口，再调用初始化方法
+
+ApplicationContextAware 与 @Autowried 注入的区别，ApplicationContextAware 不需要后置处理器也会被 Spring 执行，而后者必须需要AutowiredAnnotationBeanPostProcessor 解析，其他同理
+
+@Autowried 失效 
+配置类加了一个 BeanFactoryPostProcsser 会引起失效，这是因为会导致优先处理这个类，将它生成出来，这样导致没有注入到其他的 BeanPostProcessor 
+TODO
+
+初始化方式
+- @PostControut
+- InitializingBean
+- @Bean initMethod 属性 指定初始化方法
+执行顺序  @PostControut，InitializingBean， @Bean
+
+Bean 销毁方式
+- @PreDestroy
+- 实现接口
+- @Bean注解指定 destroyMethod 指定
+
+执行顺序 @PreDestroy 实现接口，@Bean
+
+### Scop 作用域
+- singleton
+- prototype
+- request 每次请求过来的时候会创建一个，请求结束会被销毁
+- session 每个会话一个对象
+- application 每个 web 应用一个对象
+
+单例注入其他作用域的时候，会出现失效，这是因为单例在依赖注入的时候只被执行一次，因此会导致用的都是同一个对象
+解决方法
+- @Lazy 注解代理对象是同一个，但是当每次使用代理的对象的任意方法时候，由代理创建新的对象
+- 在 SCOPE 中使用 proxyMode = ScopedProxyMode.TARGET_CLASS 也是创建代理
+- 通过 ObjectFactory<T> 依赖注入解决，泛型就是所需要的对象
+- 通过 ApplicationContext 去获取，这个可以通过 @Autowried 或者 实现 ApplicationContextAware 接口回调获取
