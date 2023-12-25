@@ -179,3 +179,12 @@ Bean 销毁方式
 - 在 SCOPE 中使用 proxyMode = ScopedProxyMode.TARGET_CLASS 也是创建代理
 - 通过 ObjectFactory<T> 依赖注入解决，泛型就是所需要的对象
 - 通过 ApplicationContext 去获取，这个可以通过 @Autowried 或者 实现 ApplicationContextAware 接口回调获取
+
+
+1. 初始化
+   1. 往容器中注册 RequestMappingHandlerMapping ，在 Bean 初始化的时候会解析所有的 Controller/RequestMapping 注解的类，将类中所有标有 @RequestMapping 注解的方法进行解析，RequestMapping 注解的信息封装成 RequestMappingInfo 对象
+      方法封装成 HandleMethod ，然后注册到 mappingRegistry 中进行保存
+
+
+在请求的时候，会根据当前的请求和RequestMappingInfo 进行匹配获取到 RequestMappingInfo ，然后到 mapRegistry 中获取 HandleMethod 
+获取适配器 HandleMappingAdpater
